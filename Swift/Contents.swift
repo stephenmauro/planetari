@@ -1,5 +1,3 @@
-//: [Previous](@previous)
-
 import SceneKit
 import PlaygroundSupport
 
@@ -24,37 +22,35 @@ PlaygroundPage.current.liveView = sceneView
 
 let box = SCNBox(width: 1, height: 1, length: 1, chamferRadius: 0)
 
+
 let boxMaterial = SCNMaterial()
 boxMaterial.diffuse.contents = "green"
 boxMaterial.isDoubleSided = true
 
 box.firstMaterial = boxMaterial
 
-let sunAxis = SCNNode()
-let sunNode = SCNNode(geometry: box)
-sunNode.rotation = SCNVector4(0, 1, 0, CGFloat.pi/4)
+let boxAxis = SCNNode()
+let boxNode = SCNNode(geometry: box)
+boxNode.rotation = SCNVector4(0, 1, 0, CGFloat.pi/4)
 
-sunAxis.addChildNode(sunNode)
+boxAxis.addChildNode(boxNode)
+scene.rootNode.addChildNode(boxAxis)
 
-scene.rootNode.addChildNode(sunAxis)
+let rotateAnimation = CABasicAnimation(keyPath: "rotation.w")
+rotateAnimation.duration = 10
+rotateAnimation.toValue = 2 * Double.pi
+rotateAnimation.repeatCount = Float.infinity
+boxNode.addAnimation(rotateAnimation, forKey: "rotate")
 
-let sunSpinAnimation = CABasicAnimation(keyPath: "rotation.w")
-sunSpinAnimation.duration = 10
-sunSpinAnimation.toValue = 2 * Double.pi + Double.pi/4
-sunSpinAnimation.repeatCount = Float.infinity
-sunNode.addAnimation(sunSpinAnimation, forKey: "rotate")
+let boxEarthCollar = SCNNode()
+boxAxis.addChildNode(boxEarthCollar)
 
-let sunEarthCollar = SCNNode()
-sunAxis.addChildNode(sunEarthCollar)
-
-let sunEarthRadius = SCNNode()
-sunEarthRadius.position = SCNVector3(x: 4, y: 0, z: 0)
-sunEarthRadius.name = "earth-radius"
+let earthRadius = SCNNode()
+earthRadius.position = SCNVector3(x: 4, y: 0, z: 0)
+earthRadius.name = "earth-radius"
 
 let earthNode = SCNNode(geometry: box)
 
-sunEarthRadius.addChildNode(earthNode)
-sunEarthCollar.addChildNode(sunEarthRadius)
+earthRadius.addChildNode(earthNode)
+boxEarthCollar.addChildNode(earthRadius)
 
-
-//: [Next](@next)
